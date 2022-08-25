@@ -1,32 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 import axios from "axios";
 
-const USERS_URL = "https://fakestoreapi.com/users";
+const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
 
-export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-  const response = await axios.get(USERS_URL);
-  return response.data;
-});
+const initialState = []
 
-const initialState = [
-    {id: '0', name: 'Arinze Meshach'},
-    {id: '1', name: 'Osike Oyinye'},
-    {id: '2', name: 'Eko Victor'}
-]
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
+    const response = await axios.get(USERS_URL);
+    return response.data
+})
 
 const userSlice = createSlice({
-  name: "users",
-  initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      return action.payload;
-    });
-  },
-});
+    name: 'users',
+    initialState,
+    reducers: {},
+    extraReducers(builder) {
+        builder.addCase(fetchUsers.fulfilled, (state, action) => {
+            return action.payload;
+        })
+    }
+})
 
 export const selectAllUsers = (state) => state.users;
-console.log(selectAllUsers);
 
-export default userSlice.reducer;
+export const selectUserById = (state, userId) =>
+    state.users.find(user => user.id === userId)
+
+export default userSlice.reducer
